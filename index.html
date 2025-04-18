@@ -1,85 +1,30 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ricerca Voli Low Cost</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    header {
-      padding: 30px 0;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    h1 {
-      font-size: 2em;
-      margin-bottom: 10px;
-    }
-
-    #form-container {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .widget-wrapper {
-      width: 100%;
-      max-width: 960px;
-      background-color: white;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-
-    footer {
-      text-align: center;
-      padding: 15px;
-      background-color: rgba(0, 0, 0, 0.3);
-      font-size: 0.9em;
-    }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 1.5em;
-      }
-
-      .widget-wrapper {
-        padding: 10px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ricerca Voli</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Trova il tuo volo ideale</h1>
-    <p>Risparmia sui biglietti aerei in un clic</p>
-  </header>
+    <div class="search-container">
+        <h1>Trova il tuo volo</h1>
+        <form id="search-form">
+            <label for="departure-city">Città di partenza</label>
+            <input type="text" id="departure-city" required placeholder="Es: MIL">
+            
+            <label for="arrival-city">Città di arrivo</label>
+            <input type="text" id="arrival-city" required placeholder="Es: LON">
+            
+            <label for="departure-date">Data di partenza</label>
+            <input type="date" id="departure-date" required>
 
-  <div id="form-container">
-    <div class="widget-wrapper">
-      <!-- Widget responsive di Travelpayouts -->
-      <script async src="//tp.media/content?currency=eur&promo_id=4049&shmarker=408483&powered_by=false&locale=it&searchUrl=kiwi&color_button=%234dafff&color_button_text=%23ffffff&color_background=%23ffffff&color_text=%23000000&border_radius=12&plain=true&powered_by=false&dark=false&mobile_full_width=true" charset="utf-8"></script>
+            <button type="submit">Cerca voli</button>
+        </form>
     </div>
-  </div>
 
-  <footer>
-    © 2025 V@lter | Powered by Travelpayouts
-  </footer>
+    <div id="results"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
