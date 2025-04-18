@@ -1,30 +1,135 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ricerca Voli</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ricerca Voli Economici</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #003366, #66ccff);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    h1 {
+      margin-top: 2rem;
+      text-shadow: 1px 1px 5px #000;
+    }
+    form {
+      display: flex;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    input, button {
+      padding: 0.7rem;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+    button {
+      background: #004080;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #0059b3;
+    }
+    .results {
+      max-width: 700px;
+      margin-bottom: 2rem;
+    }
+    .flight {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .flight strong {
+      color: #ffff99;
+    }
+  </style>
 </head>
 <body>
-    <div class="search-container">
-        <h1>Trova il tuo volo</h1>
-        <form id="search-form">
-            <label for="departure-city">Città di partenza</label>
-            <input type="text" id="departure-city" required placeholder="Es: MIL">
-            
-            <label for="arrival-city">Città di arrivo</label>
-            <input type="text" id="arrival-city" required placeholder="Es: LON">
-            
-            <label for="departure-date">Data di partenza</label>
-            <input type="date" id="departure-date" required>
 
-            <button type="submit">Cerca voli</button>
-        </form>
-    </div>
+  <h1>✈️ Ricerca Voli Economici</h1>
 
-    <div id="results"></div>
+  <form id="flightForm">
+    <input type="text" id="origin" placeholder="Origine (es. MIL)" required>
+    <input type="text" id="destination" placeholder="Destinazione (es. LON)" required>
+    <input type="date" id="date" required>
+    <button type="submit">Cerca</button>
+  </form>
 
-    <script src="script.js"></script>
+  <div class="results" id="results"></div>
+
+  <script>
+    document.getElementById('flightForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const origin = document.getElementById('origin').value.trim().toUpperCase();
+      const destination = document.getElementById('destination').value.trim().toUpperCase();
+      const date = document.getElementById('date').value;
+
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '<p>🔄 Ricerca in corso...</p>';
+
+      try {
+        // 🔁 DATI SIMULATI per GitHub Pages
+        const mockData = {
+          data: [{
+            flight_number: "2735",
+            origin: "MIL",
+            origin_airport: "BGY",
+            destination: "LON",
+            destination_airport: "STN",
+            departure_at: "2025-04-26T14:20:00+02:00",
+            airline: "FR",
+            price: 80,
+            duration: 125,
+            link: "#"
+          }],
+          success: true,
+          currency: "eur"
+        };
+
+        displayFlights(mockData.data);
+      } catch (error) {
+        resultsDiv.innerHTML = `<p>❌ Errore: ${error.message}</p>`;
+      }
+    });
+
+    function displayFlights(flights) {
+      const resultsDiv = document.getElementById('results');
+      if (!flights || flights.length === 0) {
+        resultsDiv.innerHTML = '<p>😕 Nessun volo trovato.</p>';
+        return;
+      }
+
+      resultsDiv.innerHTML = '';
+      flights.forEach(flight => {
+        const div = document.createElement('div');
+        div.className = 'flight';
+        div.innerHTML = `
+          <p><strong>Volo:</strong> ${flight.flight_number} (${flight.airline})</p>
+          <p><strong>Da:</strong> ${flight.origin} (${flight.origin_airport})</p>
+          <p><strong>A:</strong> ${flight.destination} (${flight.destination_airport})</p>
+          <p><strong>Partenza:</strong> ${new Date(flight.departure_at).toLocaleString()}</p>
+          <p><strong>Durata:</strong> ${flight.duration} min</p>
+          <p><strong>Prezzo:</strong> €${flight.price}</p>
+        `;
+        resultsDiv.appendChild(div);
+      });
+    }
+  </script>
+
 </body>
 </html>
