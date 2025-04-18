@@ -1,86 +1,79 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+/* Corpo della pagina con il background cangiante */
 body {
-  font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  background-size: 400% 400%;
+  animation: gradientBackground 15s ease infinite;
   color: white;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
 }
 
-header {
+@keyframes gradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.search-container {
   text-align: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 30px 20px;
+  margin-top: 50px;
 }
 
-h1 {
+.search-container h1 {
   font-size: 2em;
+  margin-bottom: 20px;
 }
 
-main {
-  flex: 1;
+#results {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 20px;
+  margin-top: 20px;
 }
 
-.widget-wrapper {
-  background-color: white;
-  color: black;
+.flight-card {
+  background-color: rgba(0, 0, 0, 0.7);
   padding: 20px;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-}
-
-form input,
-form button {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  font-size: 1em;
-  border: 1px solid #ccc;
+  margin: 10px;
   border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  text-align: left;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-form button {
+.flight-card h3 {
+  display: flex;
+  align-items: center;
+  font-size: 1.5em;
+}
+
+.flight-card img {
+  margin-right: 10px;
+}
+
+.flight-card p {
+  margin: 10px 0;
+}
+
+button {
+  padding: 10px 20px;
   background-color: #4dafff;
   color: white;
   border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-form button:hover {
-  background-color: #3399dd;
-}
-
-ul#results-list {
-  margin-top: 20px;
-  list-style: none;
-  padding: 0;
-}
-
-ul#results-list li {
-  margin-bottom: 15px;
-  padding: 10px;
-  border-left: 4px solid #4dafff;
-  background-color: #f9f9f9;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: rgba(0, 0, 0, 0.3);
-  font-size: 0.9em;
-  color: white;
+button:hover {
+  background-color: #3896c9;
 }
