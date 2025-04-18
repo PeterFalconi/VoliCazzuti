@@ -1,36 +1,45 @@
-document.getElementById('search-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+document.getElementById('search-form').addEventListener('submit', async function(event) {
+  event.preventDefault();
 
-  const fromCity = document.getElementById('from-city').value;
-  const toCity = document.getElementById('to-city').value;
+  const departureCity = document.getElementById('departure-city').value.toUpperCase();
+  const arrivalCity = document.getElementById('arrival-city').value.toUpperCase();
   const departureDate = document.getElementById('departure-date').value;
-  const adults = document.getElementById('adults').value;
 
-  const apiUrl = `https://api.travelpayouts.com/v2/prices/latest?origin=${fromCity}&destination=${toCity}&departure_at=${departureDate}&adults=${adults}&token=f438ef847616d4e4229a56129f870ba2`;
+  const apiUrl = `http://localhost:3000/flights?origin=${departureCity}&destination=${arrivalCity}&date=${departureDate}`;
+
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '<p>🔍 Caricamento in corso...</p>';
 
   try {
     const response = await fetch(apiUrl);
+    if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
+
     const data = await response.json();
-
-    const resultsList = document.getElementById('results-list');
-    resultsList.innerHTML = '';
-
-    if (data?.data?.length === 0) {
-      resultsList.innerHTML = '<li>Nessun volo trovato</li>';
+    if (!data.data || data.data.length === 0) {
+      resultsDiv.innerHTML = `<p>❌ Nessun volo trovato per questi criteri.</p>`;
       return;
     }
 
+    resultsDiv.innerHTML = ''; // Svuota i risultati precedenti
     data.data.forEach(flight => {
-      const listItem = document.createElement('li');
-      listItem.innerHTML = `
-        <strong>${flight.airline}</strong><br>
-        Prezzo: ${flight.price} €<br>
-        Partenza: ${new Date(flight.departure_at).toLocaleString()}
+      const flightCard = document.createElement('div');
+      flightCard.className = 'flight-card';
+
+      flightCard.innerHTML = `
+        <h3>
+          <img src="https://pics.avs.io/40/20/${flight.airline}.png" alt="${flight.airline}">
+          ${flight.airline.toUpperCase()} – ${flight.price}€
+        </h3>
+        <p><strong>Partenza:</strong> ${new Date(flight.departure_at).toLocaleString('it-IT')}</p>
+        <p><strong>Ritorno:</strong> ${flight.return_at ? new Date(flight.return_at).toLocaleString('it-IT') : 'N/D'}</p>
+        <p><strong>Durata:</strong> ${flight.duration || 'N/A'} minuti</p>
+        <a href="https://www.aviasales.com${flight.link}" target="_blank" style="color: #4dafff;">Prenota ora</a>
       `;
-      resultsList.appendChild(listItem);
+      resultsDiv.appendChild(flightCard);
     });
-  } catch (error) {
-    console.error('Errore durante la ricerca:', error);
-    document.getElementById('results-list').innerHTML = '<li>Errore nella richiesta. Riprova più tardi.</li>';
+
+  } catch (err) {
+    console.error(err);
+    resultsDiv.innerHTML = `<p>⚠️ Errore durante la ricerca: ${err.message}</p>`;
   }
 });
